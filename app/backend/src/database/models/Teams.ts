@@ -2,13 +2,13 @@ import { Model, INTEGER, STRING } from 'sequelize';
 
 import db from '.';
 
-class Teams extends Model {
+class Team extends Model {
   public id!: number;
 
-  public teamName: string;
+  public teamName!: string;
 }
 
-Teams.init({
+Team.init({
   id: { type: INTEGER, autoIncrement: true, allowNull: false, primaryKey: true },
   teamName: { type: STRING, allowNull: false },
 }, {
@@ -16,4 +16,7 @@ Teams.init({
   sequelize: db,
   modelName: 'teams',
   timestamps: false,
+  tableName: 'teams',
 });
+
+export default Team;
