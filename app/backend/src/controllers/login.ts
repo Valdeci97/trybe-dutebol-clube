@@ -1,13 +1,20 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import LoginService from '../services/login';
 
 class LoginController {
-  public login = async (req: Request, res: Response): Promise<Response> => {
-    const { email, password } = req.body;
-    const result = await LoginService.login(email, password);
-    console.log(result);
-    return res.status(200).send({ message: 'OK' });
+  public login = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { email, password } = req.body;
+      const [status, payload] = await LoginService.login(email, password);
+      return res.status(status).send(payload);
+    } catch (err) {
+      next(err);
+    }
   };
 }
 

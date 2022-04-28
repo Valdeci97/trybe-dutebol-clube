@@ -9,5 +9,7 @@ loginRouter.post(
   '/',
   (req: Request, res: Response, next: NextFunction) => LoginValidate.email(req, res, next),
   (req: Request, res: Response, next: NextFunction) => LoginValidate.password(req, res, next),
-  (req: Request, res: Response) => LoginController.login(req, res),
+  (req: Request, res: Response, next: NextFunction) => LoginController.login(req, res, next),
 );
+
+export default loginRouter;
