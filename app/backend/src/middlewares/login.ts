@@ -8,7 +8,7 @@ class LoginValidate {
     const { error } = emailSchema.validate({ email });
     if (error) {
       const [status, message] = error.message.split('/');
-      return res.status(parseInt(status, 10)).send({ error: message });
+      return res.status(parseInt(status, 10)).send({ message });
     }
     next();
   };
@@ -18,7 +18,7 @@ class LoginValidate {
     const { error } = passwordSchema.validate({ password });
     if (error) {
       const [status, message] = error.message.split('/');
-      return res.status(parseInt(status, 10)).send({ error: message });
+      return res.status(parseInt(status, 10)).send({ message });
     }
     next();
   };

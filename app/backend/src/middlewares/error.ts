@@ -7,7 +7,7 @@ export default function errorMiddleware(
   res: Response,
   _next: NextFunction,
 ) {
-  const code = err.status || 500;
+  const code = Number(err.status) || 500;
   const message = err.message || 'Something went wrong';
   return res.status(code).send({ message });
 }

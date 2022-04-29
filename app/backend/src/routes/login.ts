@@ -12,4 +12,6 @@ loginRouter.post(
   (req: Request, res: Response, next: NextFunction) => LoginController.login(req, res, next),
 );
 
+loginRouter.get('/validate', LoginController.checkToken);
+
 export default loginRouter;
