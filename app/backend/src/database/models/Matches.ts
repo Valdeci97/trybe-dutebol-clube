@@ -22,7 +22,7 @@ Match.init({
   homeTeam: { type: INTEGER, allowNull: false },
   homeTeamGoals: { type: INTEGER, allowNull: false, defaultValue: 0 },
   awayTeam: { type: INTEGER, allowNull: false },
-  awaiTeamGoals: { type: INTEGER, allowNull: false, defaultValue: 0 },
+  awayTeamGoals: { type: INTEGER, allowNull: false, defaultValue: 0 },
   inProgress: { type: BOOLEAN, allowNull: false },
 }, {
   underscored: true,
@@ -32,11 +32,11 @@ Match.init({
   tableName: 'matches',
 });
 
-Match.belongsTo(Team, { foreignKey: 'homeTeam', as: 'homeTeam' });
-Match.belongsTo(Team, { foreignKey: 'awayTeam', as: 'awayTeam' });
+Team.hasMany(Match, { foreignKey: 'homeTeam', as: 'teamHome' });
+Team.hasMany(Match, { foreignKey: 'awayTeam', as: 'teamAway' });
 
-Team.hasMany(Match, { foreignKey: 'homeTeam', as: 'match' });
-Team.hasMany(Match, { foreignKey: 'awayTeam', as: 'match' });
+Match.belongsTo(Team, { foreignKey: 'homeTeam', as: 'teamHome' });
+Match.belongsTo(Team, { foreignKey: 'awayTeam', as: 'teamAway' });
 
 // Tem de ficar aqui pois quando fiz as duas linhas acima no model Teams foi acusado dependência cíclica;
 
