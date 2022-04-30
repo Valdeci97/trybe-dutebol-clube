@@ -1,4 +1,5 @@
 import Team from '../database/models/Teams';
+import ITeam from '../interfaces/team';
 
 class TeamService {
   private _team;
@@ -8,6 +9,11 @@ class TeamService {
   public async getTeams(): Promise<Team[]> {
     const result = await this._team.findAll();
     return result;
+  }
+
+  public async getTemById(id: number) {
+    const result = await this._team.findByPk(id);
+    return result as unknown as ITeam;
   }
 }
 

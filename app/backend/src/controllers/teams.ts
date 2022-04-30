@@ -11,8 +11,23 @@ class TeamController {
   ): Promise<Response | void> => {
     try {
       const teams = await TeamService.getTeams();
-      if (!teams) return next(new HttpException(404, 'Any Team are found in database'));
+      if (!teams) return next(new HttpException(404, 'Any Team found in database'));
       return res.status(200).send(teams);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  public getTeamById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { id } = req.params;
+      const team = await TeamService.getTemById(+id);
+      if (!team) return next(new HttpException(404, 'Team not found'));
+      return res.status(200).send(team.dataValues);
     } catch (err) {
       next(err);
     }
