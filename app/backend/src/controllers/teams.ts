@@ -11,7 +11,7 @@ class TeamController {
   ): Promise<Response | void> => {
     try {
       const teams = await TeamService.getTeams();
-      if (!teams) return next(new HttpException(404, 'Any Team found in database'));
+      if (teams.length === 0) return next(new HttpException(404, 'Any Team found in database'));
       return res.status(200).send(teams);
     } catch (err) {
       next(err);
