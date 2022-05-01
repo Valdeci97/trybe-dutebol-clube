@@ -13,6 +13,16 @@ class MatchService {
     });
     return result;
   }
+
+  public async getMatchesByQuery(query: string): Promise<Match[]> {
+    const inProgress = query === 'true';
+    const result = await this._match.findAll({
+      where: { inProgress },
+      include: [{ model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
+        { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } }],
+    });
+    return result;
+  }
 }
 
 export default new MatchService();
