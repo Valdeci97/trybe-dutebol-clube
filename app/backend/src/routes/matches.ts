@@ -19,4 +19,9 @@ matchRouter.patch(
   (req: Request, res: Response, next: NextFunction) => MatchController.finish(req, res, next),
 );
 
+matchRouter.patch(
+  '/:id',
+  (req: Request, res: Response, next: NextFunction) => MatchController.updaTeScore(req, res, next),
+);
+
 export default matchRouter;

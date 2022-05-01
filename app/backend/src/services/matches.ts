@@ -2,6 +2,7 @@ import Match from '../database/models/Matches';
 import Team from '../database/models/Teams';
 import IMatches from '../interfaces/matches';
 import TeamService from './teams';
+import IScore from '../interfaces/score';
 
 class MatchService {
   private _match;
@@ -37,6 +38,11 @@ class MatchService {
 
   public async finish(id: number) {
     const result = await this._match.update({ inProgress: false }, { where: { id } });
+    return result;
+  }
+
+  public async updateScore(match: IScore) {
+    const result = await this._match.update({ ...match }, { where: { id: match.id } });
     return result;
   }
 }

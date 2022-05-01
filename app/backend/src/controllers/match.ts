@@ -57,6 +57,22 @@ class MatchController {
       next(err);
     }
   };
+
+  public updaTeScore = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { id } = req.params;
+      const { homeTeamGoals, awayTeamGoals } = req.body;
+      const currentResult = { id: parseInt(id, 10), homeTeamGoals, awayTeamGoals };
+      const updatedMatch = await MatchService.updateScore(currentResult);
+      return res.status(200).send(updatedMatch);
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 export default new MatchController();
