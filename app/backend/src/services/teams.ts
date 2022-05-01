@@ -11,7 +11,7 @@ class TeamService {
     return result;
   }
 
-  public async getTemById(id: number) {
+  public async getTeamById(id: number) {
     const result = await this._team.findByPk(id);
     return result as unknown as ITeam;
   }

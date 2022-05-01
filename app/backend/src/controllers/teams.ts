@@ -25,7 +25,7 @@ class TeamController {
   ): Promise<Response | void> => {
     try {
       const { id } = req.params;
-      const team = await TeamService.getTemById(+id);
+      const team = await TeamService.getTeamById(+id);
       if (!team) return next(new HttpException(404, 'Team not found'));
       return res.status(200).send(team.dataValues);
     } catch (err) {
