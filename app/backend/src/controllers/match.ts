@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import MatchService from '../services/matches';
 import HttpException from '../exceptions/httpException';
+import JWT from '../helpers/jwt';
 
 class MatchController {
   public getMatches = async (
@@ -24,13 +25,13 @@ class MatchController {
     }
   };
 
-  public create = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<Response | void> => {
+  public create = async (req: Request, res: Response, next: NextFunction):
+  Promise<Response | void> => {
     try {
+      const { authorization } = req.headers;
       const { homeTeam, awayTeam } = req.body;
+      if (!authorization) return next(new HttpException(404, 'Token not found'));
+      JWT.verifyToken(authorization);
       if (homeTeam === awayTeam) {
         return res.status(401).send({
           message: 'It is not possible to create a match with two equal teams',
@@ -40,7 +41,7 @@ class MatchController {
       if (!match) return res.status(404).send({ message: 'There is no team with such id!' });
       return res.status(201).send(match);
     } catch (err) {
-      next(err);
+      next(new HttpException(400, 'Invalid token'));
     }
   };
 
@@ -52,7 +53,7 @@ class MatchController {
     try {
       const { id } = req.params;
       const [match] = await MatchService.finish(+id);
-      return res.status(200).send({ id: match });
+      return res.status(200).send({ id, dbResponse: match });
     } catch (err) {
       next(err);
     }
