@@ -3,3 +3,7 @@ export default interface IStatistics {
   totalDraws: number;
   totalLosses: number;
 }
+
+export interface IPoints {
+  totalPoints: number;
+}

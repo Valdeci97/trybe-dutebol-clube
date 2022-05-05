@@ -76,12 +76,38 @@ class MatchController {
   };
 
   public leaderBoard = async (
-    req: Request,
+    _req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> => {
     try {
       const result = await MatchService.generateLeaderBoard();
+      return res.status(200).send(result);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  public homeLeaderBoard = async (
+    _req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const result = await MatchService.generateHomeLeaderBoard();
+      return res.status(200).send(result);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  public awayLeaderBoard = async (
+    _req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const result = await MatchService.generateAwayLeaderBoard();
       return res.status(200).send(result);
     } catch (err) {
       next(err);

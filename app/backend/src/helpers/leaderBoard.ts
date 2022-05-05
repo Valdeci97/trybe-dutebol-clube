@@ -1,6 +1,6 @@
 import Team from '../database/models/Teams';
 import Match from '../database/models/Matches';
-import IStatistics from '../interfaces/matchStatistics';
+import IStatistics, { IPoints } from '../interfaces/matchStatistics';
 
 export default class Leaderboard {
   private static getHomeResults(team: Team, matches: Match[]) {
@@ -47,6 +47,13 @@ export default class Leaderboard {
     return { ...goals, goalsBalance: goals.goalsFavor - goals.goalsOwn };
   }
 
+  private static formatEfficiency(team: IPoints, matches: Match[]): string {
+    const efficiency = ((team.totalPoints / (matches.length * 3)) * 100).toFixed(2);
+    if (Number(efficiency) % 1 === 0) return Number(efficiency).toFixed(0);
+    return efficiency;
+    // Fonte da condição ao final do arquivo.
+  }
+
   public static generate(teams: Team[], matches: Match[]) {
     const leaderBoard = teams.map((team: Team) => {
       const matchesUnfinished = matches.filter((match) => (
@@ -58,7 +65,7 @@ export default class Leaderboard {
         ...totalWins,
         ...totalGoals,
         totalGames: matchesUnfinished.length,
-        efficiency: ((totalWins.totalPoints / (matchesUnfinished.length * 3)) * 100).toFixed(2),
+        efficiency: Leaderboard.formatEfficiency(totalWins, matchesUnfinished),
       };
       return table;
     });
@@ -76,7 +83,7 @@ export default class Leaderboard {
         ...totalWins,
         ...totalGoals,
         totalGames: matchesUnfinished.length,
-        efficiency: ((totalWins.totalPoints / (matchesUnfinished.length * 3)) * 100).toFixed(2),
+        efficiency: Leaderboard.formatEfficiency(totalWins, matchesUnfinished),
       };
       return table;
     });
@@ -94,10 +101,12 @@ export default class Leaderboard {
         ...totalWins,
         ...totalGoals,
         totalGames: matchesUnfinished.length,
-        efficiency: ((totalWins.totalPoints / (matchesUnfinished.length * 3)) * 100).toFixed(2),
+        efficiency: Leaderboard.formatEfficiency(totalWins, matchesUnfinished),
       };
       return table;
     });
     return leaderBoard;
   }
 }
+
+// Recuperando a parte fraciuonária de uma divisão com % 1. Fonte: https://m2krym.ru/pt/computers/metody-okrugleniya-chisel-v-javascript-metody-okrugleniya-chisel-v-javascript/
