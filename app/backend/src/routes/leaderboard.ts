@@ -24,7 +24,7 @@ leaderBoardRouter.get(
     req: Request,
     res: Response,
     next: NextFunction,
-  ) => MatchController.homeLeaderBoard(req, res, next),
+  ) => MatchController.awayLeaderBoard(req, res, next),
 );
 
 export default leaderBoardRouter;
