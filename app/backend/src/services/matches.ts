@@ -3,6 +3,8 @@ import Team from '../database/models/Teams';
 import IMatches from '../interfaces/matches';
 import TeamService from './teams';
 import IScore from '../interfaces/score';
+import Leaderboard from '../helpers/leaderBoard';
+import ILeaderBoard from '../interfaces/leaderBoard';
 
 class MatchService {
   private _match;
@@ -44,6 +46,46 @@ class MatchService {
   public async updateScore(match: IScore) {
     const result = await this._match.update({ ...match }, { where: { id: match.id } });
     return result;
+  }
+
+  private static sortLeaderBoard(a: ILeaderBoard, b: ILeaderBoard) {
+    if (a.totalPoints === b.totalPoints && a.totalVictories === b.totalVictories) {
+      if (a.goalsBalance === b.goalsBalance && a.goalsFavor === b.goalsFavor) {
+        return b.goalsOwn - a.goalsOwn;
+      }
+      if (a.goalsBalance === b.goalsBalance) return b.goalsFavor - a.goalsFavor;
+      return b.goalsBalance - a.goalsBalance;
+    }
+    if (a.totalPoints === b.totalPoints) return b.totalVictories - a.totalVictories;
+    return b.totalPoints - a.totalPoints;
+  }
+
+  public async generateLeaderBoard() {
+    const teams = await TeamService.getTeams();
+    const matches = await this.getMatches();
+    const leaderBoard = Leaderboard.generate(teams, matches);
+    const sortedLeaderBoard = leaderBoard.sort((a, b) => MatchService.sortLeaderBoard(a, b));
+    return sortedLeaderBoard;
+  }
+
+  public async generateHomeLeaderBoard() {
+    const teams = await TeamService.getTeams();
+    const matches = await this.getMatches();
+    const homeLeaderBoard = Leaderboard.generateHome(teams, matches);
+    const sortedHomeLeaderBoard = homeLeaderBoard.sort(
+      (a, b) => MatchService.sortLeaderBoard(a, b),
+    );
+    return sortedHomeLeaderBoard;
+  }
+
+  public async generateAwayLeaderBoard() {
+    const teams = await TeamService.getTeams();
+    const matches = await this.getMatches();
+    const awayLeaderBoard = Leaderboard.generateAway(teams, matches);
+    const sortedAwayLeaderBoard = awayLeaderBoard.sort(
+      (a, b) => MatchService.sortLeaderBoard(a, b),
+    );
+    return sortedAwayLeaderBoard;
   }
 }
 

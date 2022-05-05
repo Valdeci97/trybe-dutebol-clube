@@ -74,6 +74,19 @@ class MatchController {
       next(err);
     }
   };
+
+  public leaderBoard = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const result = await MatchService.generateLeaderBoard();
+      return res.status(200).send(result);
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 export default new MatchController();
